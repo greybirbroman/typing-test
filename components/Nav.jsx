@@ -1,8 +1,6 @@
 'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 const Nav = () => {
@@ -18,7 +16,6 @@ const Nav = () => {
           height={30}
           className='object-contain'
         />
-        <p className='sm:flex hidden logo_text'>Typing Test</p>
       </Link>
       <div className='md:flex hidden items-center gap-4 font-semibold text-gray-700'>
         <Link
