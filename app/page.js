@@ -1,18 +1,27 @@
-import Feed from '../components/Feed';
+'use client'
+import { motion as m } from 'framer-motion';
+import { staggerContainer } from '@/utils/motion';
+import { TypingText } from '@/components/CustomTexts';
+
 
 const Home = () => {
   return (
-    <section className='w-full flex-center flex-col'>
-      <h1 className='head_text text-center'>
-        Type Faster with <br className='max-md:hidden' />
+    <section className='flex flex-col items-center'>
+      <m.h1
+        variants={staggerContainer}
+        initial='hidden'
+        whileInView='show'
+        viewport={{ once: false, amount: 0.25 }}
+      className='head_text text-center'>
+        <TypingText title=' Type Faster with' />
+        {/* <br className='max-md:hidden' /> */}
         <span className='orange_gradient text-center'>Typing Test</span>
         
-      </h1>
+      </m.h1>
       <p className='desc text-center'>
         Learn to type fast with the our Keyboard Trainer. And touch typing
         lessons will help you use all 10 fingers.
       </p>
-      <Feed />
     </section>
   );
 };

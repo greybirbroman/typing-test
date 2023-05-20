@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 
 import Nav from '../components/Nav';
+import Footer from '../components/Footer';
 
 export const metadata = {
   title: 'Typing-Test',
@@ -8,23 +9,17 @@ export const metadata = {
 };
 
 const RootLayout = ({ children }) => {
-
   return (
     <html lang='en'>
-      <body>
-        <div className='main'>
-          <div className='gradient' />
-        </div>
-        <main className='app'>
-          <header className='flex justify-between w-full'>
-            <Nav/>
-          </header>
-          {children}
-        </main>
+      <body className='flex flex-col min-h-screen'>
+       
+          <Nav />
+      
+        <main className='flex-1 app w-full'>{children}</main>
+        <Footer />
       </body>
     </html>
   );
 };
 
-export default RootLayout
-
+export default RootLayout;

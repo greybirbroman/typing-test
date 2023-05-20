@@ -1,79 +1,39 @@
 'use client';
-
-import { useState, useEffect } from 'react';
-import Form from '../../components/Form';
+import { motion as m } from 'framer-motion';
+import { staggerContainer } from '../../utils/motion';
+import { TypingText, DescText } from '../../components/CustomTexts';
+import { testingList } from '@/constants';
+import Form from '@/components/Form';
 
 const Testing = () => {
-  const [testText, setTestText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isCorrect, setIsCorrect] = useState([]);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [isStartTest, setIsStartTest] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(0);
-  const [typingAccuracy, setTypingAccuracy] = useState(100)
-  const [numberOfIncorrectCharacters, setNumberOfIncorrectCharacters] = useState(0);
 
-
-  const handleStartTest = async () => {
-    try {
-      const response = await fetch('https://baconipsum.com/api/?type=all-meat');
-      const data = await response.json();
-      const generatedText = 'Your test text goes here';
-      setTestText(generatedText);
-      setCurrentIndex(0);
-      setIsCorrect(Array(generatedText.length).fill(false));
-      setNumberOfIncorrectCharacters(0)
-      setTypingAccuracy(100)
-      setTypingSpeed(0);
-      setStartTime(Date.now());
-      setIsStartTest(true);
-    } catch (error) {
-      console.error('Error fetching text:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (currentIndex === testText.length && isStartTest) {
-      setEndTime(Date.now());
-    }
-    if(isStartTest) {
-        setTypingSpeed(calculateTypingSpeed());
-        setTypingAccuracy(calculateTypingAccuracy())
-    }
-  }, [isStartTest, currentIndex, testText]);
-
-
-  function calculateTypingSpeed() {
-    const numberOfCorrectCharacters = isCorrect.filter((correct) => correct).length;
-    const totalTimeInSeconds = (Date.now() - startTime) / 1000;
-    const typingSpeed = (numberOfCorrectCharacters / totalTimeInSeconds) * 60;
-    return typingSpeed.toFixed(0); // Округляем до целого числа
-  }
-   
-  
-
-  function calculateTypingAccuracy() {
-    const totalCharacters = testText.length;
-    const accuracy = (numberOfIncorrectCharacters / totalCharacters) * 100;
-    return (100 - accuracy).toFixed(1);
-  }
+  const pageTitle = 'Pass our typing test';
+  const pageDesc =
+    'Type in a little text. Check how many characters per minute you are typing and impress your friends or employers with a typing speed certificate.';
 
   return (
-    <Form
-      testText={testText}
-      typingSpeed={typingSpeed}
-      typingAccuracy={typingAccuracy}
-      onStartTest={handleStartTest}
-      onRetryTest={handleStartTest}
-      isCorrect={isCorrect}
-      setIsCorrect={setIsCorrect}
-      setCurrentIndex={setCurrentIndex}
-      setNumberOfIncorrectCharacters={setNumberOfIncorrectCharacters}
-      currentIndex={currentIndex}
-      isStartTest={isStartTest}
-      setIsStartTest={setIsStartTest}
-    />
+    <m.section
+      variants={staggerContainer}
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: false, amount: 0.25 }}
+      className='w-full flex flex-col items-center'
+    >
+      <TypingText title={pageTitle} />
+      <DescText title={pageDesc} />
+      <Form />
+      <ul className='py-3 px-3 w-full flex flex-col sm:flex-row gap-5 m-10'>
+        {testingList.map((card, index) => (
+          <li 
+          key={index}
+          className='rounded shadow-lg py-3 px-3 w-full flex flex-col gap-3 bg-gradient-to-b from-white to-slate-50'>
+          <h3 className='font-semibold sm:text-[20px]'>{card.title}</h3>
+          <p className='font-normal text-gray-700 tracking-tight leading-5'>{card.description}</p>
+        </li>
+        ))}
+        
+      </ul>
+    </m.section>
   );
 };
 
