@@ -16,7 +16,7 @@ const Home = () => {
       viewport={{ once: false, amount: 0.25 }}
       className='flex flex-col items-center justify-center'
     >
-      <span className='text-center head_text'>Type faster with</span>
+      <h1 className='text-center head_text'>Type <span className='orange_gradient'>Faster</span> with</h1>
       <TypingText title={pageTitle} />
       <DescText title={pageDesc}/>
     </m.section>
