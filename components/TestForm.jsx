@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import ButtonDifficultyBar from './ButtonDifficultyBar';
+import TestResultsBar from './TestResultsBar';
 import { useRef, useState, useEffect } from 'react';
 
 const TestForm = () => {
@@ -71,6 +72,7 @@ const TestForm = () => {
       );
       const data = await response.json();
       const generatedText = data[0];
+      //const generatedText = 'test text'
       // Установка уровня сложности
       let sentenceCount = 1;
 
@@ -160,32 +162,10 @@ const TestForm = () => {
         </button>
       )}
       {testStatus === 'inProgress' && (
-        <>
-          <ul className='flex gap-5 font-bold text-sm'>
-            <li className='flex items-center gap-2'>
-              <img
-                src='/assets/images/speed-icon.png'
-                alt='speed-icon'
-                className='w-7 h-7 object-contain'
-              />
-              <span className=' text-cyan-700'>{typingSpeed} с/мин </span>
-            </li>
-            <li className='flex items-center gap-2'>
-              <img
-                src='/assets/images/accuracy-icon.png'
-                alt='accuracy-icon'
-                className='w-7 h-7 object-contain'
-              />
-              <span
-                className={`${
-                  typingAccuracy < 70 ? 'text-red-500' : 'text-green-700'
-                }`} // Демотивируем, если точность упала ниже 70% :)
-              >
-                {typingAccuracy} %
-              </span>
-            </li>
-          </ul>
-        </>
+        <TestResultsBar
+          typingSpeed={typingSpeed}
+          typingAccuracy={typingAccuracy}
+        />
       )}
       {testStatus === 'inProgress' ? (
         <div className='text-[21px] leading-[32px] font-bold text-gray-700 mt-[20px] font-inter'>
@@ -218,31 +198,21 @@ const TestForm = () => {
       ) : (
         testStatus === 'completed' && (
           <div className='flex flex-col gap-3 items-center'>
-            <h2 className='font-bold sm:text-[40px] text-[30px] orange_gradient max-w-2xl'>Congratulations!!!</h2>
+            <h2 className='font-bold sm:text-[40px] text-[30px] orange_gradient max-w-2xl'>
+              Congratulations!!!
+            </h2>
             <p className='text-[20px] font-semibold text-center'>
               {typingAccuracy > 70
                 ? 'Nice try! You are almost certified.'
                 : 'You could do better if you worked with us!'}
             </p>
             <h3 className='blue_gradient font-bold text-[40px]'>
-             Your Results
+              Your Results
             </h3>
-            <ul className='flex flex-wrap justify-center gap-5 font-semibold'>
-              <li>
-              <span className=' shadow-md rounded-full py-2 px-5 bg-white'>
-                Speed: {typingSpeed} с/мин
-              </span>
-              </li>
-              <li>
-              <span
-                className={`${
-                  typingAccuracy < 70 ? 'text-red-500' : 'text-green-700'
-                } shadow-md rounded-full py-2 px-5 bg-white`}
-              >
-                Accuracy: {typingAccuracy} %
-              </span>
-              </li>
-            </ul>
+            <TestResultsBar
+              typingSpeed={typingSpeed}
+              typingAccuracy={typingAccuracy}
+            />
           </div>
         )
       )}
