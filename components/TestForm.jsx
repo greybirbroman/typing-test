@@ -70,7 +70,6 @@ const TestForm = () => {
         `https://baconipsum.com/api/?type=all-meat&paras=1`
       );
       const data = await response.json();
-      console.log(data);
       const generatedText = data[0];
       // Установка уровня сложности
       let sentenceCount = 1;
@@ -162,16 +161,16 @@ const TestForm = () => {
       )}
       {testStatus === 'inProgress' && (
         <>
-          <div className='flex gap-5 font-bold text-sm'>
-            <div className='flex items-center gap-2'>
+          <ul className='flex gap-5 font-bold text-sm'>
+            <li className='flex items-center gap-2'>
               <img
                 src='/assets/images/speed-icon.png'
                 alt='speed-icon'
                 className='w-7 h-7 object-contain'
               />
               <span className=' text-cyan-700'>{typingSpeed} с/мин </span>
-            </div>
-            <div className='flex items-center gap-2'>
+            </li>
+            <li className='flex items-center gap-2'>
               <img
                 src='/assets/images/accuracy-icon.png'
                 alt='accuracy-icon'
@@ -184,8 +183,8 @@ const TestForm = () => {
               >
                 {typingAccuracy} %
               </span>
-            </div>
-          </div>
+            </li>
+          </ul>
         </>
       )}
       {testStatus === 'inProgress' ? (
@@ -219,29 +218,31 @@ const TestForm = () => {
       ) : (
         testStatus === 'completed' && (
           <div className='flex flex-col gap-3 items-center'>
-            <h1 className='head_text text-left max-w-2xl'>
-              <span className='orange_gradient'>Congratulations!!!</span>
-            </h1>
-            <p className='desc text-left max-w-md'>
+            <h2 className='font-bold sm:text-[40px] text-[30px] orange_gradient max-w-2xl'>Congratulations!!!</h2>
+            <p className='text-[20px] font-semibold text-center'>
               {typingAccuracy > 70
                 ? 'Nice try! You are almost certified.'
                 : 'You could do better if you worked with us!'}
             </p>
-            <h3 className='green_gradient font-bold text-[40px]'>
-              Final Results
+            <h3 className='blue_gradient font-bold text-[40px]'>
+             Your Results
             </h3>
-            <div className='flex gap-5 font-semibold'>
-              <span className=' text-cyan-700 shadow-md rounded-full py-2 px-5'>
-                Speed: {typingSpeed} с/мин{' '}
+            <ul className='flex flex-wrap justify-center gap-5 font-semibold'>
+              <li>
+              <span className=' shadow-md rounded-full py-2 px-5 bg-white'>
+                Speed: {typingSpeed} с/мин
               </span>
+              </li>
+              <li>
               <span
                 className={`${
                   typingAccuracy < 70 ? 'text-red-500' : 'text-green-700'
-                } shadow-md rounded-full py-2 px-5`} // Демотивируем, если точность упала ниже 70% :)
+                } shadow-md rounded-full py-2 px-5 bg-white`}
               >
                 Accuracy: {typingAccuracy} %
               </span>
-            </div>
+              </li>
+            </ul>
           </div>
         )
       )}
