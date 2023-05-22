@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, } from 'react';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation'
 
 const Nav = () => {
+  const pathname = usePathname()
   const [toggleDropdown, setToggleDroppdown] = useState(false);
-  
+
   const toggleMenu = () => {
     setToggleDroppdown((prev) => !prev);
   };
@@ -25,22 +27,21 @@ const Nav = () => {
 
       <div className='md:flex hidden'>
         <div className='flex gap-3 md:gap-5'>
-          <Link href='/testing' className='black_btn'>
+          <Link href='/testing' className={`${pathname === '/testing' ? 'orange_btn_nohover' : 'black_btn'}`}>
             Typing Test
           </Link>
-          <Link href='/courses' className='black_btn'>
+          <Link href='/courses' className={`${pathname === '/courses' ? 'orange_btn_nohover' : 'black_btn'}`}>
             Courses
           </Link>
-          <Link href='/education' className='black_btn'>
+          <Link href='/education' className={`${pathname === '/education' ? 'orange_btn_nohover' : 'black_btn'}`}>
             Education
           </Link>
-          <button type='button' className='outline_btn'>
+          <Link href='/signout' className='outline_btn'>
             Sign Out
-          </button>
-
-          <button onClick={() => {}} className='outline_btn' type='button'>
+          </Link>
+          <Link href='/signin' className='outline_btn'>
             Sign In
-          </button>
+          </Link>
         </div>
       </div>
       {/* For Mobile Navigation*/}
@@ -77,22 +78,16 @@ const Nav = () => {
               >
                 Education
               </Link>
-              <button
-                type='button'
-                onClick={() => {
-                  toggleMenu();
-                }}
-                className='black_btn'
-              >
+              <Link href='/signin' className='black_btn' onClick={toggleMenu}>
                 Sign In
-              </button>
-              <button
-                onClick={() => toggleMenu()}
+              </Link>
+              <Link
+                href='/signout'
                 className='outline_btn'
-                type='button'
+                onClick={toggleMenu}
               >
                 Sign Out
-              </button>
+              </Link>
             </div>
           )}
         </div>

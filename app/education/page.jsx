@@ -5,10 +5,10 @@ import { TypingText, DescText } from '../../components/CustomTexts';
 
 const Education = () => {
 
-  const pageTitle = 'Learn how to touch type';
+  const pageTitle = 'Learn how to type';
   const pageDesc =
     'Do not peek at the keyboard while typing. Just slide your fingers over the keys until you find the main line.';
-    
+
   return (
     <m.section
       variants={staggerContainer}
