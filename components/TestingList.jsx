@@ -9,8 +9,8 @@ const TestingList = () => {
           <m.li 
           variants={fadeIn('up', 'spring', index * 0.5, 1)}
           key={index}
-          className='rounded shadow py-3 px-3 w-full flex flex-col gap-3 text-gray-700 even:bg-slate-50'>
-          <h3 className='font-semibold text-[20px] leading-5'>{card.title}</h3>
+          className='rounded shadow-md py-3 px-3 w-full flex flex-col gap-3 text-gray-700 even:bg-slate-50'>
+          <h3 className='font-semibold text-[20px] leading-5 text-black'>{card.title}</h3>
           <p className='font-normal tracking-tight leading-5'>{card.description}</p>
         </m.li>
         ))}  

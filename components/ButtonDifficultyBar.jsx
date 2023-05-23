@@ -1,7 +1,7 @@
 
 const ButtonDifficultyBar = ({handleStartTest}) => {
   return (
-    <ul className='flex flex-wrap gap-3 items-center justify-center'>
+    <ul className='flex flex-wrap gap-3 items-center justify-center z-20'>
     <li>
       <button
         type='button'

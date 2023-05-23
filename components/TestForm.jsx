@@ -18,6 +18,7 @@ const TestForm = () => {
   const [characters, setCharacters] = useState([]);
 
   const handleSubmit = () => {
+    if (testStatus === 'completed') return;
     setTestStatus('completed');
   };
 
@@ -26,7 +27,13 @@ const TestForm = () => {
     const pressedKey = event.key;
     const isShiftKey = event.shiftKey;
     const currentChar = testText[currentIndex];
-    const isShiftAndNotUppercase = isShiftKey && !/^([A-Z])$/.test(pressedKey);
+    const isUppercaseChar = /^[A-Z]$/.test(currentChar);
+    const isIncorrectShiftPress = isShiftKey && !isUppercaseChar;
+
+    // Проверка на currentIndex, чтобы убедиться, что он не выходит за пределы массива testText
+    if (currentIndex >= testText.length) {
+      return;
+    }
 
     const updatedCharacters = characters.map((charObj, index) => {
       if (index === currentIndex) {
@@ -50,11 +57,11 @@ const TestForm = () => {
       if (currentIndex + 1 < testText.length) {
         updatedCharacters[currentIndex + 1].isCurrent = true;
       }
-    } else if (isShiftAndNotUppercase) {
+    } else if (isIncorrectShiftPress) {
       // Обработка нажатия Shift только для символов, которые должны быть набраны с использованием Shift
       updatedCharacters[currentIndex].isIncorrect = true;
-    } else {
       setNumberOfIncorrectCharacters((prevCount) => prevCount + 1);
+    } else {
       updatedCharacters[currentIndex].isIncorrect = true;
     }
 
@@ -144,13 +151,19 @@ const TestForm = () => {
     <form
       ref={formRef}
       onFocus={() => formRef.current.focus()}
-      className='mt-10 w-full max-w-2xl flex flex-col justify-between outline-none bg-slate-50 py-4 px-4 rounded-md shadow'
+      className='mt-10 w-full max-w-2xl flex flex-col justify-between outline-none bg-slate-50 py-4 px-4 rounded shadow relative overflow-hidden'
       onKeyDown={handleKeyDown}
       onSubmit={handleSubmit}
       tabIndex={0}
     >
       {testStatus === 'notStarted' && (
-        <ButtonDifficultyBar handleStartTest={handleStartTest} />
+        <>
+          <img
+            src='/assets/images/keyboard-1.jpg'
+            className='absolute object-contain inset-0'
+          />
+          <ButtonDifficultyBar handleStartTest={handleStartTest} />
+        </>
       )}
       {testStatus === 'completed' && (
         <button
@@ -178,7 +191,10 @@ const TestForm = () => {
 
             if (isCurrent) {
               classNames += correctClass;
-            } else if (isIncorrect && !isCurrent && !isShiftKey) {
+            } else if (
+              isIncorrect ||
+              (isShiftKey && !isCorrect && !isCurrent)
+            ) {
               classNames += errorClass;
             } else if (isCorrect) {
               classNames += ' text-green-500';

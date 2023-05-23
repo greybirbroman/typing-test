@@ -10,14 +10,14 @@ const CoursesList = () => {
           <m.li
             variants={fadeIn('down', 'spring', index * 0.5, 1)}
             key={index}
-            className='flex flex-col gap-3 bg-white py-2 px-3 rounded shadow-lg relative z-0 first:bg-slate-100 last:bg-slate-50 text-gray-700'
+            className='flex flex-col gap-3 bg-white py-2 px-3 rounded shadow-md relative z-0 first:bg-slate-100 last:bg-slate-50 text-gray-700'
           >
             <img
               src={course.image}
               alt='keyboard'
               className='h-[150px] object-cover'
             />
-            <h3 className='font-semibold sm:text-[20px]'>{course.title}</h3>
+            <h3 className='font-semibold sm:text-[20px] text-black'>{course.title}</h3>
             <p className='font-normal tracking-tight'>
               {course.description}
             </p>
