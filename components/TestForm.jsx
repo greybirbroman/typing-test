@@ -1,8 +1,8 @@
 'use client';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import ButtonDifficultyBar from './ButtonDifficultyBar';
 import TestResultsBar from './TestResultsBar';
-import { useRef, useState, useEffect } from 'react';
 
 const TestForm = () => {
   const formRef = useRef(null);
@@ -12,8 +12,10 @@ const TestForm = () => {
   const [endTime, setEndTime] = useState(null);
   const [testStatus, setTestStatus] = useState('notStarted');
   const [typingSpeed, setTypingSpeed] = useState(0);
+  const [isCapsLock, setIsCapsLock] = useState(null);
   const [typingAccuracy, setTypingAccuracy] = useState(100);
-  const [numberOfIncorrectCharacters, setNumberOfIncorrectCharacters] = useState(0);
+  const [numberOfIncorrectCharacters, setNumberOfIncorrectCharacters] =
+    useState(0);
   const [characters, setCharacters] = useState([]);
 
   const handleSubmit = () => {
@@ -23,24 +25,25 @@ const TestForm = () => {
 
   const handleKeyDown = (event) => {
     event.preventDefault(); // предотвратить скролл при нажатии на space
-    const pressedKey = event.key;
-    const isShiftKey = event.shiftKey;
+    const {key, shiftKey} = event
+    const isCapsLockKey = event.getModifierState('CapsLock');
+    setIsCapsLock(isCapsLockKey);
     const currentChar = testText[currentIndex];
+    // console.log(isCapsLock)
     // console.log('pressedKey:', pressedKey);
     // console.log('currentChar:',currentChar)
     const isUppercaseChar = /^[A-Z]$/.test(currentChar);
-    const isCorrectShiftPress = isShiftKey && isUppercaseChar;
-
+    const isCorrectShiftPress = shiftKey && isUppercaseChar;
     // Проверка на currentIndex, чтобы убедиться, что он не выходит за пределы
     // массива testText
-    if (currentIndex >= testText.length) {
+    if (currentIndex >= testText?.length) {
       return;
     }
     const updatedCharacters = characters.map((charObj, index) => {
       if (index === currentIndex) {
         return {
           ...charObj,
-          isShiftKey: isShiftKey && index === currentIndex,
+          isShiftKey: shiftKey && index === currentIndex,
           isCurrent: false,
           isCorrect: false,
           isIncorrect: false,
@@ -50,8 +53,8 @@ const TestForm = () => {
     });
 
     if (
-      pressedKey === currentChar ||
-      (isShiftKey && pressedKey === currentChar)
+      key === currentChar ||
+      (shiftKey && key === currentChar)
     ) {
       updatedCharacters[currentIndex].isCorrect = true;
       setCurrentIndex((prevIndex) => prevIndex + 1);
@@ -116,6 +119,17 @@ const TestForm = () => {
   };
 
   useEffect(() => {
+    const handleCapsLockKeyUp = (event) => {
+      const isCapsLock = event.getModifierState('CapsLock');
+      setIsCapsLock(isCapsLock);
+    };
+    document.addEventListener('keyup', handleCapsLockKeyUp);
+    return () => {
+      document.removeEventListener('keyup', handleCapsLockKeyUp);
+    };
+  }, []);
+
+  useEffect(() => {
     if (currentIndex === testText.length && testStatus === 'inProgress') {
       setEndTime(Date.now());
     }
@@ -126,9 +140,7 @@ const TestForm = () => {
   }, [testStatus, currentIndex, testText]);
 
   function calculateTypingSpeed() {
-    const numberOfCorrectCharacters = characters.filter(
-      (char) => char.isCorrect
-    ).length;
+    const numberOfCorrectCharacters = characters.filter((char) => char.isCorrect).length;
     const totalTimeInSeconds = (Date.now() - startTime) / 1000;
     const typingSpeed = (numberOfCorrectCharacters / totalTimeInSeconds) * 60;
     return typingSpeed.toFixed(0); // Округляем до целого числа
@@ -136,14 +148,9 @@ const TestForm = () => {
 
   function calculateTypingAccuracy() {
     const totalCharacters = testText.length;
-    const numberOfCorrectCharacters =
-      totalCharacters - numberOfIncorrectCharacters;
+    const numberOfCorrectCharacters = totalCharacters - numberOfIncorrectCharacters;
     const accuracy = (numberOfCorrectCharacters / totalCharacters) * 100;
-
-    if (accuracy < 0) {
-      return 0;
-    }
-    return accuracy.toFixed(1);
+    return accuracy < 0 ? 0 : accuracy.toFixed(1)
   }
 
   return (
@@ -177,6 +184,8 @@ const TestForm = () => {
         <TestResultsBar
           typingSpeed={typingSpeed}
           typingAccuracy={typingAccuracy}
+          isCapsLock={isCapsLock}
+          testStatus={testStatus}
         />
       )}
       {testStatus === 'inProgress' ? (
@@ -243,6 +252,12 @@ const TestForm = () => {
           >
             Retry
           </button>
+          <Link 
+            href='https://icons8.ru/icons/'
+            target='_blank' 
+            className='absolute bottom-0 left-1 text-xs text-gray-500 tracking-tight'>
+              icons by icons8
+          </Link>
         </div>
       )}
     </form>
