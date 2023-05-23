@@ -13,8 +13,7 @@ const TestForm = () => {
   const [testStatus, setTestStatus] = useState('notStarted');
   const [typingSpeed, setTypingSpeed] = useState(0);
   const [typingAccuracy, setTypingAccuracy] = useState(100);
-  const [numberOfIncorrectCharacters, setNumberOfIncorrectCharacters] =
-    useState(0);
+  const [numberOfIncorrectCharacters, setNumberOfIncorrectCharacters] = useState(0);
   const [characters, setCharacters] = useState([]);
 
   const handleSubmit = () => {
@@ -27,14 +26,16 @@ const TestForm = () => {
     const pressedKey = event.key;
     const isShiftKey = event.shiftKey;
     const currentChar = testText[currentIndex];
+    // console.log('pressedKey:', pressedKey);
+    // console.log('currentChar:',currentChar)
     const isUppercaseChar = /^[A-Z]$/.test(currentChar);
     const isCorrectShiftPress = isShiftKey && isUppercaseChar;
 
-    // Проверка на currentIndex, чтобы убедиться, что он не выходит за пределы массива testText
+    // Проверка на currentIndex, чтобы убедиться, что он не выходит за пределы
+    // массива testText
     if (currentIndex >= testText.length) {
       return;
     }
-
     const updatedCharacters = characters.map((charObj, index) => {
       if (index === currentIndex) {
         return {
@@ -50,7 +51,7 @@ const TestForm = () => {
 
     if (
       pressedKey === currentChar ||
-      (isShiftKey && pressedKey.toLowerCase() === currentChar.toLowerCase())
+      (isShiftKey && pressedKey === currentChar)
     ) {
       updatedCharacters[currentIndex].isCorrect = true;
       setCurrentIndex((prevIndex) => prevIndex + 1);
