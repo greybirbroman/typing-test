@@ -28,7 +28,7 @@ const TestForm = () => {
     const isShiftKey = event.shiftKey;
     const currentChar = testText[currentIndex];
     const isUppercaseChar = /^[A-Z]$/.test(currentChar);
-    const isIncorrectShiftPress = isShiftKey && !isUppercaseChar;
+    const isCorrectShiftPress = isShiftKey && isUppercaseChar;
 
     // Проверка на currentIndex, чтобы убедиться, что он не выходит за пределы массива testText
     if (currentIndex >= testText.length) {
@@ -57,16 +57,14 @@ const TestForm = () => {
       if (currentIndex + 1 < testText.length) {
         updatedCharacters[currentIndex + 1].isCurrent = true;
       }
-    } else if (isIncorrectShiftPress) {
+    } else if (isCorrectShiftPress) {
       // Обработка нажатия Shift только для символов, которые должны быть набраны с использованием Shift
-      updatedCharacters[currentIndex].isIncorrect = true;
-      setNumberOfIncorrectCharacters((prevCount) => prevCount + 1);
+      updatedCharacters[currentIndex].isIncorrect = false;
     } else {
       updatedCharacters[currentIndex].isIncorrect = true;
+      setNumberOfIncorrectCharacters((prevCount) => prevCount + 1);
     }
-
     setCharacters(updatedCharacters);
-
     if (currentIndex === testText.length - 1) {
       handleSubmit();
     }
