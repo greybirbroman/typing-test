@@ -1,7 +1,12 @@
-
 import { AnimatePresence, motion as m } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 const Modal = ({ children }) => {
+  const router = useRouter();
+  const closeModal = () => {
+    router.back();
+  };
+
   return (
     <AnimatePresence>
       <div className={`z-50 inset-0 flex justify-center items-center fixed`}>
@@ -10,6 +15,7 @@ const Modal = ({ children }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className='bg-black bg-opacity-50 absolute inset-0 backdrop-blur-[3px]'
+          onClick={closeModal}
         ></m.div>
         <m.div
           initial={{ opacity: 0, y: -150 }}

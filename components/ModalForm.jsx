@@ -1,6 +1,8 @@
 'use client';
+import { useRouter } from 'next/navigation';
 
 const ModalForm = ({ title, subtext, children }) => {
+  const router = useRouter();
   return (
     <form className='flex flex-col'>
       <h3 className='head_text'>{title}</h3>
@@ -23,13 +25,14 @@ const ModalForm = ({ title, subtext, children }) => {
             placeholder='Your password'
           />
           <div className='flex justify-between mt-5'>
-            <button type='button' className='text-gray-500 text-sm'>
+            <button
+              type='button'
+              className='text-gray-500 text-sm'
+              onClick={() => router.back()}
+            >
               Cancel
             </button>
-            <button
-              type='submit'
-              className='orange_btn'
-            >
+            <button type='submit' className='orange_btn'>
               Enter
             </button>
           </div>
